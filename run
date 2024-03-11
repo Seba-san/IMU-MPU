@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Comprobar si se ha proporcionado el nombre de la imagen como argumento
+if [ $# -eq 0 ]; then
+    echo "Uso: $0 <nombre_de_imagen>"
+    echo "Ejemplo: $0 lidar-slam-melodic"
+    exit 1
+fi
+
+# Asignar el primer argumento a una variable
+IMAGE_NAME="$1"
+number="${2:-}"
+./cerrar_docker.sh
+# Ejecutar el contenedor de Docker utilizando el nombre de la imagen proporcionado
+docker run  --init -it --privileged -d \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/timezone:/etc/timezone:ro \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v /tmp/bags:/root/catkin_ws/bags/ \
+  -v "$(pwd)/volumen:/root/catkin_ws/volumen" \
+  -v /dev/i2c-1:/dev/i2c-1 \
+  --device /dev/i2c-1 \
+  --name contenedor"$number" \
+  -e DISPLAY="$DISPLAY" \
+  "$IMAGE_NAME" \

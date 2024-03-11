@@ -29,8 +29,7 @@ class MPU9150:
         self.GYRO_ZOUT_H = 0x47
         self.address=0x68
         self.gravedad=9.80665
-
-
+        self.sensibilidad_mag=0.3
 
         self.bus.write_byte_data(self.MPU9150_I2C_ADDR, self.PWR_MGMT_1, 0)
         self.init_magnetometer()
@@ -64,6 +63,11 @@ class MPU9150:
         #print(f"Accel (X, Y, Z): ({accel_x}, {accel_y}, {accel_z}) mag (X, Y, Z): ({mag_x}, {mag_y}, {mag_z})")
 
     def read_mpu9150_fast(self):
+        """Lee lo mas rapido posible la aceleracion y giroscopio del MPU9150. 
+
+        Returns:
+            _type_: accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, temp
+        """
         block = self.read_i2c_block(0x3B)
 
         # Convertir los bytes a valores flotantes
@@ -113,7 +117,7 @@ class MPU9150:
         mag_x = self.bus.read_byte_data(AK8975_ADDRESS, AK8975_HXL) | self.bus.read_byte_data(AK8975_ADDRESS, AK8975_HXL+1) << 8
         mag_y = self.bus.read_byte_data(AK8975_ADDRESS, AK8975_HXL+2) | self.bus.read_byte_data(AK8975_ADDRESS, AK8975_HXL+3) << 8
         mag_z = self.bus.read_byte_data(AK8975_ADDRESS, AK8975_HXL+4) | self.bus.read_byte_data(AK8975_ADDRESS, AK8975_HXL+5) << 8
-        return mag_x, mag_y, mag_z
+        return mag_x*self.sensibilidad_mag, mag_y*self.sensibilidad_mag, mag_z*self.sensibilidad_mag
 
     def read_i2c_word(self, register, device=None):
         """Lee y devuelve un valor de palabra (2 bytes) desde un registro dado."""
@@ -137,12 +141,8 @@ class MPU9150:
         AK8975_ASAX = 0x10
         MPU9150_ADDRESS = 0x68
         AK8975_HXL = 0x03
-
         # Registros AK8975
-
-       
-
-        # Habilitar el I2C Master Mode del MPU9150
+       # Habilitar el I2C Master Mode del MPU9150
         self.bus.write_byte_data(MPU9150_ADDRESS, 0x6A, 0x00) # Deshabilitar I2C Master
         self.bus.write_byte_data(MPU9150_ADDRESS, 0x24, 0x0D) # Configurar el control de I2C Master
         self.bus.write_byte_data(MPU9150_ADDRESS, 0x25, AK8975_ADDRESS | 0x80) # Configurar la dirección del esclavo AK8975 para lectura
@@ -167,8 +167,6 @@ def publish_imu_data():
     #pub = rospy.Publisher('/imu/mpu9150', Imu, queue_size=10)
     #rate = rospy.Rate(10)  # 10Hz
     mpu=MPU9150()
-
-
     #while not rospy.is_shutdown():
     t=time.time()
     count=0
