@@ -22,4 +22,4 @@ docker run  --init -it --privileged -d \
   --device /dev/i2c-1 \
   --name contenedor"$number" \
   -e DISPLAY="$DISPLAY" \
-  "$IMAGE_NAME" \
+  "$IMAGE_NAME" 

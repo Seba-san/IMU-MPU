@@ -29,6 +29,7 @@ def prepare_mag(mag_data):
 
 def main():
     rospy.init_node('mpu9150_publisher_node')
+    rospy.loginfo('mpu9150_publisher_node started')
 
     # Crea los publicadores para los tópicos de IMU y magnetómetro
     imu_pub = rospy.Publisher('/mpu91_imu', Imu, queue_size=10)
