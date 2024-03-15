@@ -47,7 +47,15 @@ class MPU9150:
         self.address=0x68
         self.gravedad=9.80665
         self.sensibilidad_mag=0.3
-        self.gyro_result=self.gyro_self_test() # Realiza el autotest de hardware en el giroscopio.
+        self.inicialization=False
+        try:
+            self.gyro_result=self.gyro_self_test() # Realiza el autotest de hardware en el giroscopio.
+            self.inicialization=True
+        except:
+            return 1
+            
+        
+
         try:
             self.mag_correction=self._magsetup()
         except:

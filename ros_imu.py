@@ -8,13 +8,14 @@ def prepare_imu(imu_data):
     imu_msg = Imu()
     imu_msg.header.stamp = rospy.Time.now()
     imu_msg.header.frame_id = 'imu_link'
-    # Asignar valores de imu_data a imu_msg
-    imu_msg.linear_acceleration.x = imu_data[0]
-    imu_msg.linear_acceleration.y = imu_data[1]
-    imu_msg.linear_acceleration.z = imu_data[2]
-    imu_msg.angular_velocity.x = imu_data[3]
-    imu_msg.angular_velocity.y = imu_data[4]
-    imu_msg.angular_velocity.z = imu_data[5]
+
+    # Asignar valores de imu_data a imu_msg y se le resta el bias
+    imu_msg.linear_acceleration.x = imu_data[0] #-0.1911939569734837
+    imu_msg.linear_acceleration.y = imu_data[1] #-0.1228631215901588
+    imu_msg.linear_acceleration.z = imu_data[2] #+0.1501753109254715
+    imu_msg.angular_velocity.x = imu_data[3]+3.734
+    imu_msg.angular_velocity.y = imu_data[4]+0.546
+    imu_msg.angular_velocity.z = imu_data[5]+1.143
     return imu_msg
 
 def prepare_mag(mag_data):
@@ -39,6 +40,9 @@ def main():
 
     # Instancia de la clase MPU9150
     mpu9150 = MPU9150()
+    if mpu9150.inicialization == False:
+        rospy.logerr('MPU9150 not found at 0x68')
+        return
 
     count = 0
 

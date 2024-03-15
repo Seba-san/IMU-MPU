@@ -18,7 +18,13 @@ RUN apt-get install git \
  libyaml-cpp-dev \
  nano -y
 
+RUN chmod 777 /dev/i2c-1
+
 RUN echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
+RUN echo "export ROS_MASTER_URI=http://192.168.1.2:11311">> /root/.bashrc
+RUN echo "export ROS_IP=192.168.1.4">> /root/.bashrc
+
+
 
 WORKDIR /root/catkin_ws/src
 #ENTRYPOINT ["./ros_entrypoint.sh"]
