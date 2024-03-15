@@ -12,6 +12,7 @@ RUN apt-get install python3-smbus -y
 RUN mkdir -p /root/catkin_ws/src
 RUN source /opt/ros/noetic/setup.bash \ 
     && cd /root/catkin_ws \
+    && git clone  https://github.com/Seba-san/IMU-MPU.git \
     && catkin_make
 
 RUN apt-get install git \
@@ -19,6 +20,8 @@ RUN apt-get install git \
  nano -y
 
 RUN chmod 777 /dev/i2c-1
+
+# Configuracion de la red para ROS, cambiarlo por la IP de la maquina y del host segun corresponda
 
 RUN echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
 RUN echo "export ROS_MASTER_URI=http://192.168.1.2:11311">> /root/.bashrc

@@ -19,7 +19,7 @@ Una vez instalado ROS, sigue estos pasos para instalar el paquete:
 
 ```bash
 cd ~/catkin_ws/src
-git clone https://github.com/<usuario>/<repositorio>.git
+git clone [https://github.com/Seba-san/IMU-MPU.git](https://github.com/Seba-san/IMU-MPU.git)
 ```
 
 2. Navega de regreso al directorio raíz de tu espacio de trabajo de catkin y compila:
@@ -32,35 +32,35 @@ catkin_make
 3. Asegúrate de que los scripts Python son ejecutables:
 
 ```bash
-chmod +x ~/catkin_ws/src/<repositorio>/imu.py
-chmod +x ~/catkin_ws/src/<repositorio>/ros_imu.py
+chmod +x ~/catkin_ws/src/IMU-MPU/imu.py
+chmod +x ~/catkin_ws/src/IMU-MPU/ros_imu.py
 ```
+
+
+
 
 ## Uso
 
 Para ejecutar el nodo de publicación de datos IMU, asegúrate de que tu entorno ROS esté configurado correctamente y luego ejecuta:
 
 ```bash
-rosrun <nombre_del_paquete> ros_imu.py
+rosrun imu-mpu ros_imu.py
 ```
-
 Para construir y ejecutar el contenedor Docker, asegúrate de tener Docker instalado y luego ejecuta:
 
 ```bash
-cd <directorio_del_repositorio>
-./run.sh <nombre_de_imagen>
+cd ~/catkin_ws/src/IMU-MPU/
+./run.sh ros-imu-mpu
+./entrar.sh
 ```
-
 ## Docker
 
 El `Dockerfile` proporcionado en este repositorio permite ejecutar el paquete en un entorno aislado. Para construir la imagen Docker, usa el siguiente comando:
 
 ```bash
-docker build -t <nombre_de_imagen> .
+docker build -t ros-imu-mpu .
 ```
-
 Luego, puedes ejecutar el contenedor utilizando el script `run.sh`.
-
 ## Contribuir
 
 Las contribuciones son bienvenidas. Por favor, siente libre de forkear el repositorio y abrir un pull request con tus adiciones o cambios.
